@@ -20,7 +20,7 @@ const Login = () => {
       email,
       password,
     };
-    fetch("http://localhost:5000/login", {
+    fetch("https://power-hack-server-lovat.vercel.app/login", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -29,9 +29,9 @@ const Login = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if(data.token){
-          localStorage.setItem('token', data.token)
-          navigate('/billingpage')
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          navigate("/billingpage");
         }
       })
       .catch((error) => {

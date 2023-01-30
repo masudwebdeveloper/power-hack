@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+import { CountContext } from "../BillingPage/BillingPage";
 
 const Header = () => {
+  // const {sum} = useContext(CountContext);
+  // console.log(sum);
   return (
     <header className="p-4 dark:bg-gray-800 dark:text-gray-100">
       <div className="container flex justify-between h-16 mx-auto">
@@ -27,7 +30,7 @@ const Header = () => {
               href="##"
               className="flex items-center px-4 -mb-1 border-b-2 dark:border-transparent"
             >
-              Total Count: 0
+              
             </a>
           </li>
         </ul>

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import BillingModal from "../BillingModal/BillingModal";
 import EditBillingModal from "../EditBillingModal/EditBillingModal";
@@ -7,25 +7,25 @@ import EditBillingModal from "../EditBillingModal/EditBillingModal";
 const BillingPage = () => {
   const [billingData, setBillingData] = useState(null);
   const [openModal, setOpenModal] = useState(true);
+  const [allBill, setAllBill] = useState([]);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   console.log(search);
   const { data: billingList = [], refetch } = useQuery({
-    queryKey: ["billingList"],
+    queryKey: ["billingList", page, search],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/billing-list?size=${3}&page=${page}&search=${search}`
+        `https://power-hack-server-lovat.vercel.app/billing-list?size=${10}&page=${page}&search=${search}`
       );
       const data = await res.json();
       return data;
     },
   });
 
-  const newCount = billingList.count;
-  const pages = Math.ceil(newCount / 3);
+  const pages = Math.ceil(billingList.count / 10);
 
   const handleDelete = (id) => {
-    fetch(`http://localhost:5000/delete-billing/${id}`, {
+    fetch(`https://power-hack-server-lovat.vercel.app/delete-billing/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -39,27 +39,43 @@ const BillingPage = () => {
         toast.error(`billing data deleting error ${err.message}`);
       });
   };
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const name = e.target.value;
-  //   console.log(name);
-  //   setSearch(name);
-
-  // };
+  useEffect(() => {
+    fetch("https://power-hack-server-lovat.vercel.app/total-paid")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllBill(data);
+      })
+      .catch((err) => console.error(err.message));
+  }, [billingList]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    setSearch(name);
+    e.target.reset();
+  };
+  const paidTotal = allBill.reduce((accumulator, bill) => {
+    return accumulator + parseInt(bill.amount);
+  }, 0);
   return (
     <main className="lg:max-w-[1340px] mx-auto">
       <div className="navbar bg-base-200 my-10">
         <div className="flex-1 gap-2">
           <h1>Billing: </h1>
-          <div className="form-control">
-            <input
-              onChange={(e) => setSearch(e.target.value)}
-              type="text"
-              placeholder="Search by name"
-              name="name"
-              className="input input-bordered"
-            />
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="form-control">
+              <input
+                type="text"
+                placeholder="Search by name"
+                name="name"
+                className="input input-bordered"
+              />
+            </div>
+          </form>
+        </div>
+        <div className="navbar-center mr-[500px]">
+          <h1>
+            <strong>Paid Total: {paidTotal}</strong>
+          </h1>
         </div>
         <div className="flex-none">
           <label
@@ -207,14 +223,14 @@ const BillingPage = () => {
       </div>
       <div className="text-center mb-10">
         {[...Array(pages).keys()].map((i) => (
-          <button
-            onClick={() => setPage(i)}
-            className={` ${
-              page === i ? "bg-red-500" : ""
-            } hover:bg-red-500 mr-2 bg-gray-500 p-2 rounded-sm text-slate-50 cursor-pointer`}
-            key={i}
-          >
-            {i + 1}
+          <button key={i} onClick={() => setPage(i)}>
+            <span
+              className={` ${
+                page === i ? "bg-red-500" : ""
+              } hover:bg-red-500 mr-2 bg-gray-500 p-2 rounded-sm text-slate-50`}
+            >
+              {i + 1}
+            </span>
           </button>
         ))}
       </div>

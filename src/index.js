@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Loader from "./components/Share/Loader/Loader";
+import BillingPage from "./components/BillingPage/BillingPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {

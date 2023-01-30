@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
-const EditBillingModal = ({billingData, setBillingData, refetch}) => {
-    const {name, email, number, amount, billId, _id} = billingData;
+const EditBillingModal = ({ billingData, setBillingData, refetch }) => {
+  const { name, email, number, amount, billId, _id } = billingData;
   const [isLoading, setIsLoading] = useState(true);
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
   const handleBillingSubmit = (data) => {
     setIsLoading(true);
@@ -23,7 +23,7 @@ const EditBillingModal = ({billingData, setBillingData, refetch}) => {
       billId,
     };
     console.log(name, email, number, amount, billId);
-    fetch(`http://localhost:5000/update-billing/${_id}`, {
+    fetch(`https://power-hack-server-lovat.vercel.app/update-billing/${_id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -34,10 +34,10 @@ const EditBillingModal = ({billingData, setBillingData, refetch}) => {
       .then((data) => {
         console.log(data);
         if (data.acknowledged) {
-            setBillingData(null);
-            refetch();
-            reset();
-            setIsLoading(false);
+          setBillingData(null);
+          refetch();
+          reset();
+          setIsLoading(false);
         }
       })
       .catch((err) => {

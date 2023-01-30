@@ -31,7 +31,7 @@ const Register = () => {
       password,
     };
 
-    fetch("http://localhost:5000/registration", {
+    fetch("https://power-hack-server-lovat.vercel.app/registration", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -40,26 +40,14 @@ const Register = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if(data.token){
-          
-          navigate('/login')
+        if (data.token) {
+          navigate("/login");
         }
       })
       .catch((err) => console.error(err.message));
   };
 
-  //   const saveUser = (userData) => {
-  //     fetch("https://local-hospital-server.vercel.app/user", {
-  //       method: "POST",
-  //       headers: {
-  //         "content-type": "application/json",
-  //       },
-  //       body: JSON.stringify(userData),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((data) => console.log(data))
-  //       .catch((err) => console.error(err.message));
-  //   };
+  
   return (
     <div className="">
       <div className="lg:max-w-[1350px] mx-auto py-5">

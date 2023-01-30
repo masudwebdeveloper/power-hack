@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
-const BillingModal = ({setOpenModal, refetch}) => {
+const BillingModal = ({ setOpenModal, refetch }) => {
   const [isLoading, setIsLoading] = useState(true);
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
   const handleBillingSubmit = (data) => {
     setIsLoading(true);
@@ -23,7 +23,7 @@ const BillingModal = ({setOpenModal, refetch}) => {
       billId,
     };
     console.log(name, email, number, amount, billId);
-    fetch("http://localhost:5000/add-billing", {
+    fetch("https://power-hack-server-lovat.vercel.app/add-billing", {
       method: "POST",
       headers: {
         "content-type": "application/json",
